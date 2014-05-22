@@ -2,27 +2,24 @@
 <html>
 <head>
 	<title>BeatsJs Demo</title>
+    <style>
+
+    audio {
+        display: block;
+    }
+
+    .frequencyBlock {
+        display: inline-block;
+        height: 20px;
+        width: 40px;
+        margin: 5px;
+        border: 1px solid #555;
+    }
+    </style>
 </head>
 <body>
 
-<input type="file" id="file" />
-
-<p>
-  <label>File Name:</label>
-  <span id="filename"></span>
-</p>
-
-<p>
-  <label>File Type:</label>
-  <span id="filetype"></span>
-</p>
-
-<p>
-  <label>File Size:</label>
-  <span id="filesize"></span>
-</p>
-
-<audio id="audioSrcElement" src="test.mp3"></audio>
+<audio controls="controls" id="audioSrcElement" src="test.mp3"></audio>
 
 
 </body>

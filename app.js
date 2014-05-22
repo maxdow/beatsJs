@@ -1,11 +1,57 @@
 var sourceElement = document.getElementById("audioSrcElement") ;
 
-console.log(sourceElement);
-sourceElement.addEventListener("canplaythrought",function(e){
-	console.log(e);
+var context = new AudioContext();
+var analyser = context.createAnalyser();
+
+analyser.fftSize = 32;
+console.log(analyser.frequencyBinCount); // fftSize/2 = 32 data points
+
+var frequencyBlockArray = [] ;
+
+for (var i = 0; i < analyser.frequencyBinCount; i++) {
+
+    var elm = document.createElement("div");
+
+    elm.className="frequencyBlock" ;
+    frequencyBlockArray.push(elm);
+
+    document.body.appendChild(elm);
+}
+
+var source = context.createMediaElementSource(sourceElement);
+    source.connect(analyser);
+    analyser.connect(context.destination);
+
+sourceElement.addEventListener("play",function(e){
+    analyseLoop();
 });
 
-// File input
+
+
+function analyseLoop(){
+    if(!sourceElement.paused){
+        var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(frequencyData);
+
+        frequencyBlockArray.forEach(function(elm,i){
+            var val = frequencyData[i] ;
+            var red = val;
+            var green = 255 - val;
+            var blue = val / 2;
+
+            elm.style.background = "rgb("+red+","+green+","+blue+")";
+        });
+        //console.log(frequencyData);
+        //setTimeout(analyseLoop,100);
+        window.requestAnimationFrame(analyseLoop);
+    }
+}
+
+
+
+sourceElement.addEventListener("pause",function(e){
+    console.log("pause");
+});
 
 
 
